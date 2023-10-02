@@ -6,7 +6,12 @@ use std::time;
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let path: String = args[1].clone();
-    hourly(path);
+    if args.len() < 3 { hourly(path, 1.0); return (); }
+    let volume: f32 = match args[2].parse::<f32>() {
+        Ok(v) => v,
+        Err(_) => 1.0,
+    };
+    hourly(path, volume);
 }
 fn app_one(queue: &Sink, path: String) -> Result<i32, i32> {
     let file;
@@ -21,9 +26,10 @@ fn app_one(queue: &Sink, path: String) -> Result<i32, i32> {
     return Ok(0);
 }
 
-fn hourly(path: String) {
+fn hourly(path: String, volume: f32) {
     let (_mogus, sthand) = OutputStream::try_default().unwrap();
     let sinky = Sink::try_new(&sthand).unwrap();
+    sinky.set_volume(volume);
 
     let mut hour = (time::UNIX_EPOCH.elapsed().unwrap().as_secs() + 72000) % 86400 / 3600;
     let mut second: u64 = time::UNIX_EPOCH.elapsed().unwrap().as_secs() % 3600;
@@ -39,7 +45,7 @@ fn hourly(path: String) {
         sinky.play();
         until_hour(&sinky, runpath, 3600 - second);
         if hour == 24 { hour = 0 } else { hour += 1 };
-        second = 0;
+        second = time::UNIX_EPOCH.elapsed().unwrap().as_secs() % 3600 - 3600;
     }
 }
 fn hour_name(path: String, hour: u64) -> String {
