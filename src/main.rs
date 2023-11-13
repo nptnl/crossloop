@@ -31,7 +31,7 @@ fn hourly(path: String, volume: f32) {
     let sinky = Sink::try_new(&sthand).unwrap();
     sinky.set_volume(volume);
 
-    let mut hour = (time::UNIX_EPOCH.elapsed().unwrap().as_secs() + 72000) % 86400 / 3600;
+    let mut hour = (time::UNIX_EPOCH.elapsed().unwrap().as_secs() + 68400) % 86400 / 3600;
     let mut second: u64 = time::UNIX_EPOCH.elapsed().unwrap().as_secs() % 3600;
     let mut hrpath: String;
     let mut runpath: String;
