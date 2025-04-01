@@ -32,7 +32,7 @@ fn hourly(path: String, volume: f32) {
     sinky.set_volume(volume);
 
     let mut hour = (time::UNIX_EPOCH.elapsed().unwrap().as_secs()) % 86400 / 3600;
-    hour += 24 - 5;
+    hour += 24 - 4;
     hour %= 24;
     let mut second: u64 = time::UNIX_EPOCH.elapsed().unwrap().as_secs() % 3600;
     let mut hrpath: String;
